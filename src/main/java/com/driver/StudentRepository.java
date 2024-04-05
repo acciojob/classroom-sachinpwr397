@@ -1,8 +1,7 @@
 package com.driver;
 
-import java.util.*;
-
 import org.springframework.stereotype.Repository;
+import java.util.*;
 
 @Repository
 public class StudentRepository {
@@ -12,47 +11,50 @@ public class StudentRepository {
     private HashMap<String, List<String>> teacherStudentMapping;
 
     public StudentRepository(){
-        this.studentMap = new HashMap<String, Student>();
-        this.teacherMap = new HashMap<String, Teacher>();
-        this.teacherStudentMapping = new HashMap<String, List<String>>();
+        this.studentMap = new HashMap<>();
+        this.teacherMap = new HashMap<>();
+        this.teacherStudentMapping = new HashMap<>();
     }
 
     public void saveStudent(Student student){
-        // your code goes here
+        studentMap.put(student.getName(), student);
     }
 
     public void saveTeacher(Teacher teacher){
-        // your code goes here
+        teacherMap.put(teacher.getName(), teacher);
     }
 
-    public void saveStudentTeacherPair(String student, String teacher){
-        if(studentMap.containsKey(student) && teacherMap.containsKey(teacher)){
-            // your code goes here
+    public void saveStudentTeacherPair(String studentName, String teacherName){
+        if(studentMap.containsKey(studentName) && teacherMap.containsKey(teacherName)){
+            List<String> students = teacherStudentMapping.getOrDefault(teacherName, new ArrayList<>());
+            students.add(studentName);
+            teacherStudentMapping.put(teacherName, students);
         }
     }
 
-    public Student findStudent(String student){
-        // your code goes here
+    public Student findStudent(String studentName){
+        return studentMap.get(studentName);
     }
 
-    public Teacher findTeacher(String teacher){
-        // your code goes here
+    public Teacher findTeacher(String teacherName){
+        return teacherMap.get(teacherName);
     }
 
-    public List<String> findStudentsFromTeacher(String teacher){
-        // your code goes here
-        // find student list corresponding to a teacher
+    public List<String> findStudentsFromTeacher(String teacherName){
+        return teacherStudentMapping.getOrDefault(teacherName, new ArrayList<>());
     }
 
     public List<String> findAllStudents(){
-        // your code goes here
+        return new ArrayList<>(studentMap.keySet());
     }
 
-    public void deleteTeacher(String teacher){
-        // your code goes here
+    public void deleteTeacher(String teacherName){
+        teacherMap.remove(teacherName);
+        teacherStudentMapping.remove(teacherName);
     }
 
     public void deleteAllTeachers(){
-        // your code goes here
+        teacherMap.clear();
+        teacherStudentMapping.clear();
     }
 }
